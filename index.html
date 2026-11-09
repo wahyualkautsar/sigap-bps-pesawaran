@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2e5395">
+  <title>SIGAP - Pengambilan Barang BPS Pesawaran</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Overlay: loading & error -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <div id="overlayLoading" class="overlay-box">
+      <div class="spinner-border text-light" role="status"></div>
+      <p class="mt-3 mb-0">Memuat SIGAP...</p>
+    </div>
+    <div id="overlayError" class="overlay-box" style="display:none">
+      <i class="bi bi-exclamation-triangle-fill" style="font-size:36px"></i>
+      <p class="mt-3 mb-0 fw-semibold">Gagal memuat data</p>
+      <p id="overlayErrMsg" class="small mt-2 mb-0"></p>
+      <button class="btn-retry" onclick="loadInit()"><i class="bi bi-arrow-clockwise"></i> Coba Lagi</button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon"><i class="bi bi-box-seam-fill"></i></div>
+        <div>
+          <h1>SIGAP</h1>
+          <span>Pengambilan Barang — BPS Kabupaten Pesawaran</span>
+        </div>
+      </div>
+      <button class="theme-toggle" onclick="toggleDarkMode()" title="Mode Gelap" aria-label="Ganti tema">
+        <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Tab -->
+  <nav class="tab-nav">
+    <div class="tab-nav-inner">
+      <button class="tab-btn active" data-tab="ambil" onclick="navigateTo('ambil')">
+        <i class="bi bi-cart-plus-fill"></i> Ambil Barang
+      </button>
+      <button class="tab-btn" data-tab="riwayat" onclick="navigateTo('riwayat')">
+        <i class="bi bi-clock-history"></i> Riwayat
+      </button>
+    </div>
+  </nav>
+
+  <main class="app-main">
+
+    <!-- AMBIL BARANG -->
+    <section id="section-ambil" class="content-section active">
+      <div class="card-panel">
+        <h2 class="panel-title"><i class="bi bi-clipboard-check"></i> Formulir Pengambilan Barang</h2>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label" for="namaPengambil">Seksi yang Mengambil <span class="text-danger">*</span></label>
+            <select id="namaPengambil" class="form-select">
+              <option value="">-- Pilih Seksi --</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="tanggalAmbil">Tanggal Pengambilan <span class="text-danger">*</span></label>
+            <input type="date" id="tanggalAmbil" class="form-control">
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <label class="form-label fw-semibold">Daftar Barang yang Diambil</label>
+        <div id="itemRows"></div>
+
+        <button type="button" class="btn btn-outline-add mt-2" onclick="tambahBarisBarang()">
+          <i class="bi bi-plus-circle"></i> Tambah Barang Lain
+        </button>
+
+        <div class="d-grid mt-4">
+          <button type="button" class="btn btn-submit" id="btnSubmit" onclick="submitForm()">
+            <i class="bi bi-send-check-fill"></i> Simpan Pengambilan
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIWAYAT -->
+    <section id="section-riwayat" class="content-section">
+      <div class="card-panel">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+          <h2 class="panel-title mb-0"><i class="bi bi-clock-history"></i> Riwayat Pengambilan</h2>
+          <div class="d-flex gap-2 align-items-center">
+            <input type="search" id="riwayatSearch" class="form-control form-control-sm search-input" placeholder="Cari seksi / barang...">
+            <button class="btn btn-refresh" onclick="loadRiwayat()" title="Muat ulang">
+              <i class="bi bi-arrow-clockwise"></i>
+            </button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-riwayat">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Seksi</th>
+                <th>Nama Barang</th>
+                <th class="text-center">Jumlah</th>
+                <th>Waktu Input</th>
+              </tr>
+            </thead>
+            <tbody id="riwayatBody">
+              <tr><td colspan="5" class="text-center empty-hint py-4">Memuat data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Template baris barang -->
+  <template id="itemRowTemplate">
+    <div class="item-row">
+      <div class="row g-2 align-items-end">
+        <div class="col-7">
+          <label class="form-label small">Nama Barang</label>
+          <select class="form-select item-select"></select>
+        </div>
+        <div class="col-3">
+          <label class="form-label small">Jumlah (PCS)</label>
+          <input type="number" min="1" inputmode="numeric" class="form-control item-jumlah" placeholder="0">
+        </div>
+        <div class="col-2">
+          <button type="button" class="btn btn-remove w-100" onclick="hapusBarisBarang(this)" aria-label="Hapus baris">
+            <i class="bi bi-trash3"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Toast -->
+  <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:2000">
+    <div id="appToast" class="toast" role="alert">
+      <div class="toast-header">
+        <strong class="me-auto" id="toastTitle">Notifikasi</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+      </div>
+      <div class="toast-body" id="toastBody"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
