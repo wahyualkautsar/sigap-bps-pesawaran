@@ -516,11 +516,18 @@ function cetakBon(i) {
   <table style="width:100%;border-collapse:collapse;table-layout:fixed"><thead><tr><th style="${th}width:5%">No.</th><th style="${th}width:33%">Nama Barang</th><th style="${th}width:17%">Kode Barang</th><th style="${th}width:8%">Satuan</th><th style="${th}width:11%">Banyaknya</th><th style="${th}width:13%">Harga Satuan</th><th style="${th}width:13%">Jumlah</th></tr></thead><tbody>${rows}
   <tr style="height:26px"><td colspan="4" style="${c}text-align:center">Jumlah</td><td style="${c}"></td><td style="${c}background:#c0c0c0!important"></td><td style="${c}text-align:right;font-weight:700">${num(tot)}</td></tr></tbody></table>
   <div style="border:1px solid #000;border-top:0;padding:5px 8px;height:48px"><span style="${bl}">Keperluan :</span> ${esc(b.keperluan)}</div>
-  <div style="display:flex;margin-top:18px">
-    <div style="flex:1"><div style="height:18px"></div><div>Dibukukan Tgl. : ……………………………….</div><div style="font-style:italic">Operator Persediaan</div><div style="height:56px"></div><div style="${u}">${esc(S.OPERATOR_NAMA)}</div></div>
-    <div style="flex:1;text-align:center"><div style="height:18px"></div><div>Mengetahui/Menyetujui :</div><div>Kasubbag Umum,</div><div style="height:56px"></div><div style="${u}">${esc(S.KASUBAG_NAMA)}</div></div>
-    <div style="flex:1;text-align:right"><div style="height:18px">Gedong Tataan, ${esc(longDate(b.tgl))}</div><div>Penanggung Jawab,</div><div>Ketua Tim ${esc(b.seksi)}</div><div style="height:38px"></div><div style="${u}">${esc(ketua)}</div></div>
-  </div></div>`);
+  <table style="width:100%;border-collapse:collapse;table-layout:fixed;margin-top:18px;border:0">
+    <tr>
+      <td style="width:33%;vertical-align:top;text-align:left;height:90px;padding:0"><div style="white-space:nowrap">Dibukukan Tgl. : ………………………</div><div style="font-style:italic">Operator Persediaan</div></td>
+      <td style="width:34%;vertical-align:top;text-align:center;padding:0"><div style="white-space:nowrap">Mengetahui/Menyetujui :</div><div>Kasubbag Umum,</div></td>
+      <td style="width:33%;vertical-align:top;text-align:right;padding:0"><div style="white-space:nowrap">Gedong Tataan, ${esc(longDate(b.tgl))}</div><div>Penanggung Jawab,</div></td>
+    </tr>
+    <tr>
+      <td style="vertical-align:bottom;text-align:left;padding:0"><span style="${u}">${esc(S.OPERATOR_NAMA)}</span></td>
+      <td style="vertical-align:bottom;text-align:center;padding:0"><span style="${u}">${esc(S.KASUBAG_NAMA)}</span></td>
+      <td style="vertical-align:bottom;text-align:right;padding:0"><span style="${u}">${esc(ketua)}</span></td>
+    </tr>
+  </table></div>`);
 }
 
 /* ---- Barang Masuk ---- */
