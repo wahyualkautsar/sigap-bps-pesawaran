@@ -142,7 +142,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);margin:
       <section id="s-dash">
         <div class="row g-3 mb-3">
           <div class="col-6 col-lg-3"><div class="kpi k1"><small>Jenis Barang</small><b id="kJenis">0</b></div></div>
-          <div class="col-6 col-lg-3"><div class="kpi k2"><small>Total Stok</small><b id="kStok">0</b></div></div>
+          <div class="col-6 col-lg-3"><div class="kpi k2"><small>Stok Habis</small><b id="kStok">0</b></div></div>
           <div class="col-6 col-lg-3"><div class="kpi k3"><small>Stok Menipis</small><b id="kLow">0</b></div></div>
           <div class="col-6 col-lg-3"><div class="kpi k4"><small>Nilai Persediaan</small><b id="kNilai">Rp0</b></div></div>
         </div>
@@ -157,8 +157,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);margin:
           <input id="bCari" class="form-control" style="max-width:300px" placeholder="Cari kode / nama barang..." oninput="renderBarang()">
           <div class="d-flex gap-2"><button class="btn-soft" onclick="exportBarang()"><i class="bi bi-file-earmark-excel"></i> Excel</button>
           <button class="btn-main px-3" style="padding:8px" onclick="editBarang()"><i class="bi bi-plus-lg"></i> Tambah Barang</button></div></div>
-        <div class="sc"><table class="table tbl"><thead><tr><th>No</th><th>Kode</th><th>Nama Barang</th><th class="n">Stok Awal</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Stok</th><th class="n">Harga (Rp)</th><th class="n">Nilai (Rp)</th><th>Status</th><th></th></tr></thead><tbody id="bBody"></tbody></table></div>
-        <div class="small text-secondary mt-2">Semua satuan = Pcs. Stok = Stok Awal + Masuk − Keluar (transaksi setelah tanggal saldo awal di Pengaturan).</div>
+        <div class="sc"><table class="table tbl"><thead><tr><th>No</th><th>Kode</th><th>Nama Barang</th><th>Satuan</th><th class="n">Stok Awal</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Stok</th><th class="n">Harga (Rp)</th><th class="n">Nilai (Rp)</th><th>Status</th><th></th></tr></thead><tbody id="bBody"></tbody></table></div>
+        <div class="small text-secondary mt-2">Satuan mengikuti file opname (bisa diubah lewat tombol edit). Stok = Stok Awal + Masuk − Keluar (transaksi setelah tanggal saldo awal di Pengaturan).</div>
       </div></section>
 
       <section id="s-masuk" class="hide"><div class="panel">
@@ -182,7 +182,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);margin:
           <div class="d-flex gap-2 align-items-center"><label class="form-label mb-0">Periode</label><input id="lBln" type="month" class="form-control" style="max-width:200px" oninput="renderLaporan()"></div>
           <div class="d-flex gap-2"><button class="btn-soft" onclick="cetakRekap()"><i class="bi bi-printer"></i> Cetak</button><button class="btn-soft" onclick="exportLaporan()"><i class="bi bi-file-earmark-excel"></i> Excel</button></div></div>
         <div class="fw-bold mb-2">Rekap per Barang <span class="text-secondary small fw-normal" id="lLabel"></span></div>
-        <div class="sc"><table class="table tbl" id="lTab1"><thead><tr><th>No</th><th>Kode</th><th>Nama Barang</th><th class="n">Stok Awal</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Stok Akhir</th><th class="n">Nilai (Rp)</th></tr></thead><tbody id="lBody"></tbody></table></div>
+        <div class="sc"><table class="table tbl" id="lTab1"><thead><tr><th>No</th><th>Kode</th><th>Nama Barang</th><th>Satuan</th><th class="n">Stok Awal</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Stok Akhir</th><th class="n">Nilai (Rp)</th></tr></thead><tbody id="lBody"></tbody></table></div>
         <div class="fw-bold mt-4 mb-2">Rekap per Seksi / Tim</div>
         <div class="sc"><table class="table tbl" id="lTab2" style="max-width:640px"><thead><tr><th>Seksi / Tim</th><th class="n">Jumlah Bon</th><th class="n">Jenis Barang</th><th class="n">Total Unit</th><th class="n">Nilai (Rp)</th></tr></thead><tbody id="lBody2"></tbody></table></div>
       </div></section>
@@ -241,7 +241,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);margin:
 const API_URL = (typeof GAS_URL !== 'undefined' && GAS_URL) ? GAS_URL : 'GANTI_DENGAN_URL_WEB_APP_GAS';
 const LOGO = 'data:image/jpeg;base64,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';
 // Daftar barang cadangan (dari file opname) — dipakai bila koneksi ke Apps Script gagal
-const BARANG_STATIK = [["1010302004000001","Amplop Besar Berlogo BPS"],["1010302004000003","Amplop Kecil Berlogo BPS"],["1010302004000007","Amplop Putih Polos"],["1010301003000002","Binder Clip 155"],["1010301003000003","Binder Clip 260"],["1010301003000027","Binder Clip Joyko 300"],["1010301003000026","Clip Binder 280"],["1010301006000029","Folder Arsip"],["1010301999000029","Gunting Besar (Joyko SC-848)"],["1010301011000006","Isi Staples Besar"],["1010301011000005","Isi Staples Kecil"],["1010301010000019","Joyko Double Tape 24mm"],["1010301010000018","Kenko Lakban OPP Bening"],["1010302001000010","Kertas HVS A3 Sinar Dunia"],["1010302001000015","Kertas HVS A4 75 Gram"],["1010302001000016","Kertas HVS F4 75 Gram"],["1010301010000004","Lakban Bening"],["1010301010000007","Lakban Hitam"],["1010301010000008","Lem Kertas Stick Kecil"],["1010301999000035","Linko Stabilo Highlighter"],["1010304004000129","Maintenance Box Epson L1455"],["1010304004000129-B","Maintenance Box Epson L15160"],["1010301006000012","Map Folio"],["1010301006000010","Map Kertas Berlogo BPS"],["1010302002000010","Memo Stick Joyko"],["1010301010000017","Nachi Double Tape 24mm"],["1010301999000002","Pembolong Kertas Besar"],["1010301999000003","Pembolong Kertas Kecil"],["1010301001000080","Pen 3 Warna"],["1010301004000012","Penghapus Merk Joyko"],["1010301001000008","Pensil 2B"],["1010301001000065","Pensil 2B Faber Castle"],["1010301001000087","Pensil 2B Joyko"],["1010301999000033","Peruncing Joyko B-23"],["1010301999000034","Pilot Boliner Ballpoint"],["1010301008000014","Pisau Cutter"],["1010301999000025","Plastik Gulung"],["1010399999000901","Plastik Roll Fotocopy"],["1010301001000086","Pulpen 4 Warna"],["1010301001000095","Pulpen Snowman BP-7"],["1010304004000077","Reffil Toner 83A"],["1010301001000058","Spidol Permanen"],["1010301999000039","Spidol Snowman Permanen G-520 Black"],["1010301001000006","Stabilo"],["1010301001000077","Standard Pen AE7 0.5"],["1010301999000038","Stapler Joyko HD-50"],["1010302002000011","Stick Notes"],["1010304004000126","Tinta Brother BT Biru"],["1010304004000111","Tinta Brother BT Black"],["1010304004000128","Tinta Brother BT Kuning"],["1010304004000127","Tinta Brother BT Merah"],["1010304004000104","Tinta Epson 003 Original - Cyan"],["1010304004000105","Tinta Epson 003 Original - Magenta"],["1010304004000106","Tinta Epson 003 Original - Yellow"],["1010304004000117","Tinta Epson 008 Original - Black"],["1010304004000118","Tinta Epson 008 Original - Cyan"],["1010304004000120","Tinta Epson 008 Original - Magenta"],["1010304004000119","Tinta Epson 008 Original - Yellow"],["1010304004000109","Tinta Epson 664 Cyan"],["1010304004000107","Tinta Epson 664 Magenta"],["1010304004000108","Tinta Epson 664 Yellow"],["1010304004000110","Tinta Epson 774 Original - Black"],["1010301002000010","Tinta Stempel Manis Violet"],["1010301003000014","Trigonal Clip No. 3"]];
+const BARANG_STATIK = [["1010302004000001","Amplop Besar Berlogo BPS","Pcs"],["1010302004000003","Amplop Kecil Berlogo BPS","Pcs"],["1010302004000007","Amplop Putih Polos","Pcs"],["1010301003000002","Binder Clip 155","Kotak"],["1010301003000003","Binder Clip 260","Kotak"],["1010301003000027","Binder Clip Joyko 300","Kotak"],["1010301003000026","Clip Binder 280","Kotak"],["1010301006000029","Folder Arsip","Pcs"],["1010301999000029","Gunting Besar (Joyko SC-848)","Pcs"],["1010301011000006","Isi Staples Besar","Kotak"],["1010301011000005","Isi Staples Kecil","Kotak"],["1010301010000019","Joyko Double Tape 24mm","Pcs"],["1010301010000018","Kenko Lakban OPP Bening","Pcs"],["1010302001000010","Kertas HVS A3 Sinar Dunia","Rim"],["1010302001000015","Kertas HVS A4 75 Gram","Rim"],["1010302001000016","Kertas HVS F4 75 Gram","Rim"],["1010301010000004","Lakban Bening","Pcs"],["1010301010000007","Lakban Hitam","Pcs"],["1010301010000008","Lem Kertas Stick Kecil","Pcs"],["1010301999000035","Linko Stabilo Highlighter","Pcs"],["1010304004000129","Maintenance Box Epson L1455","Pcs"],["1010304004000129-B","Maintenance Box Epson L15160","Pcs"],["1010301006000012","Map Folio","Pcs"],["1010301006000010","Map Kertas Berlogo BPS","Pcs"],["1010302002000010","Memo Stick Joyko","Pcs"],["1010301010000017","Nachi Double Tape 24mm","Pcs"],["1010301999000002","Pembolong Kertas Besar","Pcs"],["1010301999000003","Pembolong Kertas Kecil","Pcs"],["1010301001000080","Pen 3 Warna","Pcs"],["1010301004000012","Penghapus Merk Joyko","Kotak"],["1010301001000008","Pensil 2B","Pcs"],["1010301001000065","Pensil 2B Faber Castle","Pcs"],["1010301001000087","Pensil 2B Joyko","Pcs"],["1010301999000033","Peruncing Joyko B-23","Pcs"],["1010301999000034","Pilot Boliner Ballpoint","Pcs"],["1010301008000014","Pisau Cutter","Pcs"],["1010301999000025","Plastik Gulung","Pcs"],["1010399999000901","Plastik Roll Fotocopy","Pcs"],["1010301001000086","Pulpen 4 Warna","Pcs"],["1010301001000095","Pulpen Snowman BP-7","Pcs"],["1010304004000077","Reffil Toner 83A","Pcs"],["1010301001000058","Spidol Permanen","Pcs"],["1010301999000039","Spidol Snowman Permanen G-520 Black","Pcs"],["1010301001000006","Stabilo","Pcs"],["1010301001000077","Standard Pen AE7 0.5","Pcs"],["1010301999000038","Stapler Joyko HD-50","Pcs"],["1010302002000011","Stick Notes","Pcs"],["1010304004000126","Tinta Brother BT Biru","Pcs"],["1010304004000111","Tinta Brother BT Black","Pcs"],["1010304004000128","Tinta Brother BT Kuning","Pcs"],["1010304004000127","Tinta Brother BT Merah","Pcs"],["1010304004000104","Tinta Epson 003 Original - Cyan","Pcs"],["1010304004000105","Tinta Epson 003 Original - Magenta","Pcs"],["1010304004000106","Tinta Epson 003 Original - Yellow","Pcs"],["1010304004000117","Tinta Epson 008 Original - Black","Pcs"],["1010304004000118","Tinta Epson 008 Original - Cyan","Pcs"],["1010304004000120","Tinta Epson 008 Original - Magenta","Pcs"],["1010304004000119","Tinta Epson 008 Original - Yellow","Pcs"],["1010304004000109","Tinta Epson 664 Cyan","Pcs"],["1010304004000107","Tinta Epson 664 Magenta","Pcs"],["1010304004000108","Tinta Epson 664 Yellow","Pcs"],["1010304004000110","Tinta Epson 774 Original - Black","Pcs"],["1010301002000010","Tinta Stempel Manis Violet","Pcs"],["1010301003000014","Trigonal Clip No. 3","Kotak"]];
 const BLN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 
 /* ============ UTIL ============ */
@@ -296,7 +296,7 @@ async function initPublic() {
     $('pRows').innerHTML = ''; pubAddRow();
   } catch (e) {
     toast('Gagal memuat data', e.message, 'danger');
-    PUB = { barang: BARANG_STATIK.map(b => ({ kode: b[0], nama: b[1], stok: null })), seksi: PUB.seksi.length ? PUB.seksi : ['KPA','Tata Usaha / Umum','Sosial','Distribusi','Produksi','Nerwilis','IPDS'] };
+    PUB = { barang: BARANG_STATIK.map(b => ({ kode: b[0], nama: b[1], stok: null, satuan: b[2] })), seksi: PUB.seksi.length ? PUB.seksi : ['KPA','Tata Usaha / Umum','Sosial','Distribusi','Produksi','Nerwilis','IPDS'] };
     $('pTgl').value = today(); $('pRows').innerHTML = ''; pubAddRow();
   }
   $('loading').classList.add('hide');
@@ -307,14 +307,15 @@ function pubTab(t) {
   if (t === 'riwayat') pubRiwayat();
 }
 function barangOpts(withStok) {
-  return '<option value="">-- Pilih Barang --</option>' + PUB.barang.map(b => `<option value="${esc(b.kode)}">${esc(b.nama)}${withStok && b.stok != null ? ' (stok ' + b.stok + ')' : ''}</option>`).join('');
+  return '<option value="">-- Pilih Barang --</option>' + PUB.barang.map(b => `<option value="${esc(b.kode)}" data-sat="${esc(b.satuan || 'Pcs')}">${esc(b.nama)}${withStok && b.stok != null ? ' (stok ' + b.stok + ' ' + esc(b.satuan || 'Pcs') + ')' : ''}</option>`).join('');
 }
 function pubAddRow() {
   const d = document.createElement('div'); d.className = 'item-row';
   d.innerHTML = `<div class="row g-2 align-items-end"><div class="col-12 col-sm-7"><label class="form-label small">Nama Barang</label><select class="form-select i-kode">${barangOpts(true)}</select></div>
-    <div class="col-8 col-sm-3"><label class="form-label small">Jumlah (PCS)</label><input type="number" min="1" class="form-control i-qty" placeholder="0"></div>
+    <div class="col-8 col-sm-3"><label class="form-label small i-lbl">Jumlah</label><input type="number" min="1" class="form-control i-qty" placeholder="0"></div>
     <div class="col-4 col-sm-2"><button class="btn-del w-100 i-del" style="height:42px" type="button"><i class="bi bi-trash3"></i></button></div></div>`;
   d.querySelector('.i-del').onclick = () => { d.remove(); pubRemBtns(); };
+  d.querySelector('.i-kode').onchange = e => { const o = e.target.selectedOptions[0]; d.querySelector('.i-lbl').textContent = o && o.dataset.sat ? 'Jumlah (' + o.dataset.sat + ')' : 'Jumlah'; };
   $('pRows').appendChild(d); pubRemBtns();
 }
 function pubRemBtns() { const r = document.querySelectorAll('#pRows .item-row'); r.forEach(x => x.querySelector('.i-del').style.display = r.length > 1 ? 'block' : 'none'); }
@@ -341,7 +342,7 @@ async function pubRiwayat() {
   try {
     const res = await apiGet('getRiwayat');
     if (!res.success) { tb.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4">${esc(res.message)}</td></tr>`; return; }
-    tb.innerHTML = res.data.length ? res.data.map(r => `<tr><td>${esc(r.tanggal)}</td><td>${esc(r.seksi)}</td><td>${esc(r.barang)}</td><td class="text-center"><span class="pill">${esc(r.jumlah)} pcs</span></td><td class="text-secondary">${esc(r.waktu)}</td></tr>`).join('')
+    tb.innerHTML = res.data.length ? res.data.map(r => `<tr><td>${esc(r.tanggal)}</td><td>${esc(r.seksi)}</td><td>${esc(r.barang)}</td><td class="text-center"><span class="pill">${esc(r.jumlah)} ${esc(r.satuan || 'Pcs')}</span></td><td class="text-secondary">${esc(r.waktu)}</td></tr>`).join('')
       : '<tr><td colspan="5" class="text-center text-secondary py-4">Belum ada riwayat pengambilan.</td></tr>';
   } catch (e) { tb.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4">${esc(e.message)}</td></tr>`; }
 }
@@ -397,11 +398,11 @@ function renderAll() {
 function renderDash() {
   const min = D.settings.STOK_MIN, act = D.barang.filter(b => b.aktif);
   $('kJenis').textContent = act.length;
-  $('kStok').textContent = num(act.reduce((s, b) => s + b.stok, 0));
+  $('kStok').textContent = act.filter(b => b.stok <= 0).length;
   const low = act.filter(b => b.stok <= min).sort((a, b) => a.stok - b.stok);
   $('kLow').textContent = low.length;
   $('kNilai').textContent = rp(act.reduce((s, b) => s + b.stok * b.harga, 0));
-  $('lowSub').textContent = `Stok ≤ ${min} pcs`;
+  $('lowSub').textContent = `Stok ≤ ${min}`;
   $('lowList').innerHTML = low.length ? '<table class="table tbl"><tbody>' + low.map(b => `<tr><td>${esc(b.nama)}</td><td class="n low">${b.stok}</td></tr>`).join('') + '</tbody></table>' : '<div class="text-secondary text-center py-5">Semua stok di atas batas minimum.</div>';
   const ym = today().slice(0, 7), tot = {};
   D.keluar.forEach(t => { if (t.tgl.slice(0, 7) === ym) tot[t.nama] = (tot[t.nama] || 0) + t.jumlah; });
@@ -417,13 +418,13 @@ function renderDash() {
 function renderBarang() {
   const q = $('bCari').value.toLowerCase(), min = D.settings.STOK_MIN; let i = 0;
   $('bBody').innerHTML = D.barang.filter(b => !q || (b.kode + ' ' + b.nama).toLowerCase().includes(q)).map(b => `<tr>
-    <td>${++i}</td><td>${esc(b.kode)}</td><td>${esc(b.nama)}</td><td class="n">${num(b.saldo)}</td><td class="n">${num(b.masuk)}</td><td class="n">${num(b.keluar)}</td>
+    <td>${++i}</td><td>${esc(b.kode)}</td><td>${esc(b.nama)}</td><td>${esc(b.satuan)}</td><td class="n">${num(b.saldo)}</td><td class="n">${num(b.masuk)}</td><td class="n">${num(b.keluar)}</td>
     <td class="n ${b.stok <= min ? 'low' : ''}">${num(b.stok)}</td><td class="n">${b.harga ? num(b.harga) : '<span class="low">belum</span>'}</td><td class="n">${num(b.stok * b.harga)}</td>
-    <td><span class="pill">${b.aktif ? 'Aktif' : 'Nonaktif'}</span></td><td><button class="btn-soft" onclick="editBarang('${esc(b.kode)}')"><i class="bi bi-pencil"></i></button></td></tr>`).join('') || '<tr><td colspan="11" class="text-center text-secondary py-4">Tidak ada data.</td></tr>';
+    <td><span class="pill">${b.aktif ? 'Aktif' : 'Nonaktif'}</span></td><td><button class="btn-soft" onclick="editBarang('${esc(b.kode)}')"><i class="bi bi-pencil"></i></button></td></tr>`).join('') || '<tr><td colspan="12" class="text-center text-secondary py-4">Tidak ada data.</td></tr>';
 }
 function exportBarang() {
   const r = [['No','Kode Barang','Nama Barang','Satuan','Stok Awal','Masuk','Keluar','Stok','Harga Satuan','Nilai']];
-  D.barang.forEach((b, i) => r.push([i + 1, b.kode, b.nama, 'Pcs', b.saldo, b.masuk, b.keluar, b.stok, b.harga, b.stok * b.harga]));
+  D.barang.forEach((b, i) => r.push([i + 1, b.kode, b.nama, b.satuan, b.saldo, b.masuk, b.keluar, b.stok, b.harga, b.stok * b.harga]));
   xl([{ name: 'Stok Barang', rows: r }], 'stok-barang-' + today() + '.xlsx');
 }
 
@@ -432,7 +433,7 @@ let mdForm, onSave = null;
 function openForm(title, html, save) { mdForm = mdForm || new bootstrap.Modal($('mdForm')); $('mfTitle').textContent = title; $('mfBody').innerHTML = html; onSave = save; mdForm.show(); }
 $('mfSave').onclick = async () => { if (!onSave) return; const b = $('mfSave'); busy(b, true, 'Menyimpan...'); try { await onSave(); } catch (e) { toast('Error', e.message, 'danger'); } busy(b, false); };
 function itemRowHtml(withHarga) {
-  const opts = '<option value="">-- Pilih Barang --</option>' + D.barang.filter(b => b.aktif).map(b => `<option value="${esc(b.kode)}" data-stok="${b.stok}" data-h="${b.harga}">${esc(b.nama)} (stok ${b.stok})</option>`).join('');
+  const opts = '<option value="">-- Pilih Barang --</option>' + D.barang.filter(b => b.aktif).map(b => `<option value="${esc(b.kode)}" data-stok="${b.stok}" data-h="${b.harga}">${esc(b.nama)} (stok ${b.stok} ${esc(b.satuan)})</option>`).join('');
   return `<div class="item-row"><div class="row g-2 align-items-end"><div class="col-12 ${withHarga ? 'col-md-5' : 'col-md-8'}"><label class="form-label small">Barang</label><select class="form-select f-kode">${opts}</select></div>
     <div class="col-5 col-md-2"><label class="form-label small">Jumlah</label><input type="number" min="1" class="form-control f-qty"></div>
     ${withHarga ? '<div class="col-5 col-md-3"><label class="form-label small">Harga Satuan</label><input type="number" min="0" class="form-control f-harga"></div>' : ''}
@@ -465,12 +466,13 @@ function bonList() {
   D.keluar.forEach(t => { const k = t.waktu + '|' + t.seksi + '|' + (t.waktu ? '' : t.tgl); if (!m.has(k)) m.set(k, { key: k, waktu: t.waktu, tgl: t.tgl, seksi: t.seksi, keperluan: t.keperluan, rows: [] }); m.get(k).rows.push(t); });
   return [...m.values()].sort((a, b) => a.tgl < b.tgl ? 1 : a.tgl > b.tgl ? -1 : b.waktu - a.waktu);
 }
+function sat(kode) { return (D.byKode[kode] || {}).satuan || 'Pcs'; }
 function harga(kode) { return (D.byKode[kode] || {}).harga || 0; }
 function renderKeluar() {
   const bln = $('kBln').value, sk = $('kSeksi').value, q = $('kCari').value.toLowerCase();
   window._bons = bonList().filter(b => (!bln || b.tgl.slice(0, 7) === bln) && (!sk || b.seksi === sk) && (!q || b.rows.some(r => r.nama.toLowerCase().includes(q))));
   $('kBody').innerHTML = window._bons.map((b, i) => `<tr><td>${dmy(b.tgl)}</td><td>${esc(b.seksi)}</td>
-    <td>${b.rows.map(r => `<div>${esc(r.nama)} <span class="pill">${r.jumlah}</span></div>`).join('')}</td>
+    <td>${b.rows.map(r => `<div>${esc(r.nama)} <span class="pill">${r.jumlah} ${esc(sat(r.kode))}</span></div>`).join('')}</td>
     <td class="n">${b.rows.length}</td><td class="n">${num(b.rows.reduce((s, r) => s + r.jumlah, 0))}</td><td class="n">${num(b.rows.reduce((s, r) => s + r.jumlah * harga(r.kode), 0))}</td>
     <td class="text-nowrap"><button class="btn-soft" onclick="cetakBon(${i})"><i class="bi bi-printer"></i> Cetak</button> ${b.waktu ? `<button class="btn-del" onclick="hapusBon(${i})"><i class="bi bi-trash3"></i></button>` : ''}</td></tr>`).join('')
     || '<tr><td colspan="7" class="text-center text-secondary py-4">Tidak ada data.</td></tr>';
@@ -505,7 +507,7 @@ function cetakBon(i) {
   const n = Math.max(10, b.rows.length); let tot = 0, rows = '';
   for (let k = 0; k < n; k++) {
     const t = b.rows[k], h = t ? harga(t.kode) : 0, jm = t ? t.jumlah * h : 0; tot += jm;
-    rows += `<tr style="height:22px"><td style="${c}text-align:center">${k + 1}</td><td style="${c}">${t ? esc(t.nama) : ''}</td><td style="${c}text-align:center;font-size:10.5px">${t ? esc(t.kode) : ''}</td><td style="${c}text-align:center">${t ? 'pcs' : ''}</td><td style="${c}text-align:right">${t ? num(t.jumlah) : ''}</td><td style="${c}text-align:right">${t ? num(h) : ''}</td><td style="${c}text-align:right">${t ? num(jm) : ''}</td></tr>`;
+    rows += `<tr style="height:22px"><td style="${c}text-align:center">${k + 1}</td><td style="${c}">${t ? esc(t.nama) : ''}</td><td style="${c}text-align:center;font-size:10.5px">${t ? esc(t.kode) : ''}</td><td style="${c}text-align:center">${t ? esc(sat(t.kode).toLowerCase()) : ''}</td><td style="${c}text-align:right">${t ? num(t.jumlah) : ''}</td><td style="${c}text-align:right">${t ? num(h) : ''}</td><td style="${c}text-align:right">${t ? num(jm) : ''}</td></tr>`;
   }
   const bl = 'color:#1b7fd0;font-style:italic;font-weight:700', u = 'font-weight:700;text-decoration:underline';
   printHTML(`<div style="border:2px solid #1b9ae0;padding:12px 16px;font:12px Arial,Helvetica,sans-serif;color:#000">
@@ -524,7 +526,7 @@ function cetakBon(i) {
 /* ---- Barang Masuk ---- */
 function renderMasuk() {
   const bln = $('mBln').value, list = D.masuk.filter(t => !bln || t.tgl.slice(0, 7) === bln);
-  $('mBody').innerHTML = list.map(t => `<tr><td>${dmy(t.tgl)}</td><td>${esc(t.kode)}</td><td>${esc(t.nama)}</td><td>${esc(t.ket || '-')}</td><td class="n">${num(t.jumlah)}</td><td class="n">${num(t.harga)}</td><td class="n">${num(t.jumlah * t.harga)}</td>
+  $('mBody').innerHTML = list.map(t => `<tr><td>${dmy(t.tgl)}</td><td>${esc(t.kode)}</td><td>${esc(t.nama)}</td><td>${esc(t.ket || '-')}</td><td class="n">${num(t.jumlah)} ${esc(sat(t.kode))}</td><td class="n">${num(t.harga)}</td><td class="n">${num(t.jumlah * t.harga)}</td>
     <td><button class="btn-del" onclick="hapusMasuk('${esc(t.id)}')"><i class="bi bi-trash3"></i></button></td></tr>`).join('') || '<tr><td colspan="8" class="text-center text-secondary py-4">Belum ada barang masuk.</td></tr>';
 }
 function formMasuk() {
@@ -546,16 +548,16 @@ async function hapusMasuk(id) {
 
 /* ---- Edit Barang ---- */
 function editBarang(kode) {
-  const b = kode ? D.byKode[kode] : { kode: '', nama: '', saldo: 0, harga: 0, aktif: true }, baru = !kode;
+  const b = kode ? D.byKode[kode] : { kode: '', nama: '', satuan: 'Pcs', saldo: 0, harga: 0, aktif: true }, baru = !kode;
   openForm(baru ? 'Tambah Barang' : 'Edit Barang', `<div class="row g-3">
     <div class="col-md-5"><label class="form-label">Kode Barang</label><input id="eKode" class="form-control" value="${esc(b.kode)}" ${baru ? '' : 'readonly'}></div>
     <div class="col-md-7"><label class="form-label">Nama Barang</label><input id="eNama" class="form-control" value="${esc(b.nama)}"></div>
-    <div class="col-md-4"><label class="form-label">Satuan</label><input class="form-control" value="Pcs" readonly></div>
+    <div class="col-md-4"><label class="form-label">Satuan</label><input id="eSat" list="dlSat" class="form-control" value="${esc(b.satuan || 'Pcs')}"><datalist id="dlSat"><option>Pcs</option><option>Kotak</option><option>Rim</option><option>Box</option><option>Pak</option><option>Lusin</option><option>Set</option><option>Buah</option></datalist></div>
     <div class="col-md-4"><label class="form-label">Stok Awal (Stok Sistem)</label><input type="number" min="0" id="eSaldo" class="form-control" value="${b.saldo}"></div>
     <div class="col-md-4"><label class="form-label">Harga Satuan (Rp)</label><input type="number" min="0" id="eHarga" class="form-control" value="${b.harga}"></div>
     <div class="col-md-4"><label class="form-label">Status</label><select id="eAktif" class="form-select"><option value="1" ${b.aktif ? 'selected' : ''}>Aktif</option><option value="0" ${b.aktif ? '' : 'selected'}>Nonaktif</option></select></div></div>`,
     async () => {
-      const res = await adminApi('saveBarang', { baru, kode: $('eKode').value, nama: $('eNama').value, saldo: $('eSaldo').value, harga: $('eHarga').value, aktif: $('eAktif').value === '1' });
+      const res = await adminApi('saveBarang', { baru, kode: $('eKode').value, nama: $('eNama').value, satuan: $('eSat').value, saldo: $('eSaldo').value, harga: $('eHarga').value, aktif: $('eAktif').value === '1' });
       if (!res.success) return toast('Gagal', res.message, 'danger');
       mdForm.hide(); toast('Berhasil', res.message, 'success'); await reload(true);
     });
@@ -569,7 +571,7 @@ function laporanData() {
     let awal = b.saldo, mm = 0, kk = 0;
     D.masuk.forEach(t => { if (t.kode !== b.kode || t.tgl <= cut) return; if (m && t.tgl < st) awal += t.jumlah; else if (t.tgl <= en) mm += t.jumlah; });
     D.keluar.forEach(t => { if (t.kode !== b.kode || t.tgl <= cut) return; if (m && t.tgl < st) awal -= t.jumlah; else if (t.tgl <= en) kk += t.jumlah; });
-    R.push([i + 1, b.kode, b.nama, awal, mm, kk, awal + mm - kk, (awal + mm - kk) * b.harga]);
+    R.push([i + 1, b.kode, b.nama, b.satuan, awal, mm, kk, awal + mm - kk, (awal + mm - kk) * b.harga]);
   });
   const bons = {};
   D.keluar.forEach(t => { if (m && t.tgl.slice(0, 7) !== m) return; const o = P[t.seksi] || (P[t.seksi] = { bon: new Set(), k: new Set(), q: 0, v: 0 }); o.bon.add(t.waktu + '|' + t.tgl); o.k.add(t.kode); o.q += t.jumlah; o.v += t.jumlah * harga(t.kode); });
@@ -577,7 +579,7 @@ function laporanData() {
 }
 function renderLaporan() {
   const d = laporanData(); $('lLabel').textContent = d.m ? '— ' + BLN[+d.m.slice(5) - 1] + ' ' + d.m.slice(0, 4) : '— sejak tanggal saldo awal; pengambilan semua periode';
-  $('lBody').innerHTML = d.R.map(r => `<tr><td>${r[0]}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td class="n">${num(r[3])}</td><td class="n">${num(r[4])}</td><td class="n">${num(r[5])}</td><td class="n ${r[6] <= D.settings.STOK_MIN ? 'low' : ''}">${num(r[6])}</td><td class="n">${num(r[7])}</td></tr>`).join('');
+  $('lBody').innerHTML = d.R.map(r => `<tr><td>${r[0]}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td class="n">${num(r[4])}</td><td class="n">${num(r[5])}</td><td class="n">${num(r[6])}</td><td class="n ${r[7] <= D.settings.STOK_MIN ? 'low' : ''}">${num(r[7])}</td><td class="n">${num(r[8])}</td></tr>`).join('');
   $('lBody2').innerHTML = Object.keys(d.P).sort().map(k => { const o = d.P[k]; return `<tr><td>${esc(k)}</td><td class="n">${o.bon.size}</td><td class="n">${o.k.size}</td><td class="n">${num(o.q)}</td><td class="n">${num(o.v)}</td></tr>`; }).join('') || '<tr><td colspan="5" class="text-center text-secondary py-3">Belum ada pengambilan.</td></tr>';
 }
 function cetakRekap() {
@@ -586,7 +588,7 @@ function cetakRekap() {
   printHTML(`${st}<div><h3 style="text-align:center;margin:0">REKAP PERSEDIAAN &amp; PENGAMBILAN BARANG</h3><p style="text-align:center;margin:2px 0 12px">BPS Kabupaten Pesawaran — Periode: ${esc(per)}</p><table>${$('lTab1').innerHTML}</table><h4>Rekap per Seksi / Tim</h4><table>${$('lTab2').innerHTML}</table></div>`);
 }
 function exportLaporan() {
-  const d = laporanData(), r1 = [['No','Kode Barang','Nama Barang','Stok Awal','Masuk','Keluar','Stok Akhir','Nilai (Rp)']].concat(d.R), r2 = [['Seksi / Tim','Jumlah Bon','Jenis Barang','Total Unit','Nilai (Rp)']];
+  const d = laporanData(), r1 = [['No','Kode Barang','Nama Barang','Satuan','Stok Awal','Masuk','Keluar','Stok Akhir','Nilai (Rp)']].concat(d.R), r2 = [['Seksi / Tim','Jumlah Bon','Jenis Barang','Total Unit','Nilai (Rp)']];
   Object.keys(d.P).sort().forEach(k => { const o = d.P[k]; r2.push([k, o.bon.size, o.k.size, o.q, o.v]); });
   const r3 = [['Tanggal','Seksi','Kode','Nama Barang','Jumlah','Harga Satuan','Nilai','Keperluan']];
   D.keluar.filter(t => !d.m || t.tgl.slice(0, 7) === d.m).forEach(t => r3.push([t.tgl, t.seksi, t.kode, t.nama, t.jumlah, harga(t.kode), t.jumlah * harga(t.kode), t.keperluan]));
