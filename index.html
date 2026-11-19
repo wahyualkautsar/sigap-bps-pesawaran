@@ -1,165 +1,612 @@
 <!DOCTYPE html>
 <html lang="id" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#2e5395">
-  <title>SIGAP - Pengambilan Barang BPS Pesawaran</title>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2e5395">
+<title>SIGAP - Pengambilan Barang BPS Pesawaran</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="light"]{--bg:#f2f4f8;--card:#fff;--tx:#1c2430;--mut:#6b7280;--bd:#e2e6ee;--ac:#2e5395;--ac2:#234174;--acl:rgba(46,83,149,.08);--hd:linear-gradient(135deg,#2e5395,#1c3866);--dg:#d64545;--ok:#1f9d55;--sh:0 4px 16px rgba(20,30,60,.06);--side:#14233f}
+[data-theme="dark"]{--bg:#10141d;--card:#1a2030;--tx:#eef1f7;--mut:#9aa3b5;--bd:#2a3245;--ac:#5b8ad6;--ac2:#7aa2e6;--acl:rgba(91,138,214,.15);--hd:linear-gradient(135deg,#1a2b4d,#0f1830);--dg:#ef6363;--ok:#37c774;--sh:0 4px 20px rgba(0,0,0,.4);--side:#0b1426}
+*{box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);margin:0;min-height:100vh}
+.hide{display:none!important}
+.loading-overlay{position:fixed;inset:0;background:var(--hd);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3000;color:#fff}
+.app-header{background:var(--hd);padding:18px 16px;box-shadow:var(--sh)}
+.header-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-icon{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px}
+.brand h1{color:#fff;font-size:20px;font-weight:800;margin:0}.brand span{color:rgba(255,255,255,.8);font-size:12.5px}
+.hbtn{border:none;background:rgba(255,255,255,.15);color:#fff;border-radius:10px;padding:8px 14px;font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap}
+.hbtn:hover{background:rgba(255,255,255,.28)}
+.round{width:40px;height:40px;border-radius:50%;padding:0}
+.tab-nav{background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:100}
+.tab-inner{max-width:960px;margin:0 auto;display:flex;gap:6px;padding:8px 16px}
+.tab-btn{border:none;background:transparent;color:var(--mut);padding:10px 18px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.tab-btn.active{background:var(--acl);color:var(--ac)}
+.main-pub{max-width:960px;margin:24px auto;padding:0 16px 40px}
+.panel{background:var(--card);border-radius:14px;box-shadow:var(--sh);padding:24px;border:1px solid var(--bd);margin-bottom:16px}
+.panel-title{font-size:18px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.form-label{font-weight:600;font-size:13.5px;color:var(--mut)}
+.form-control,.form-select{background:var(--bg);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:9px 12px;font-size:14.5px}
+.form-control:focus,.form-select:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--acl);background:var(--card);color:var(--tx)}
+.item-row{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:10px}
+.btn-add{border:1.5px dashed var(--ac);color:var(--ac);background:transparent;border-radius:10px;padding:8px 16px;font-weight:600;font-size:14px}
+.btn-add:hover{background:var(--acl)}
+.btn-main{background:var(--ac);color:#fff;border:none;border-radius:12px;padding:12px;font-weight:700;font-size:15px}
+.btn-main:hover{background:var(--ac2);color:#fff}.btn-main:disabled{opacity:.7}
+.btn-soft{background:var(--acl);color:var(--ac);border:none;border-radius:10px;padding:7px 13px;font-weight:600;font-size:13px}
+.btn-soft:hover{background:var(--ac);color:#fff}
+.btn-del{background:rgba(214,69,69,.1);color:var(--dg);border:none;border-radius:10px;padding:7px 11px}
+.btn-del:hover{background:var(--dg);color:#fff}
+.tbl{font-size:13.5px;color:var(--tx);--bs-table-bg:transparent;--bs-table-color:var(--tx);--bs-table-border-color:var(--bd)}
+.tbl thead th{color:var(--mut);font-weight:700;font-size:12px;text-transform:uppercase;border-bottom:2px solid var(--bd);padding:10px 8px;white-space:nowrap}
+.tbl td{padding:9px 8px;vertical-align:middle}
+.pill{background:var(--acl);color:var(--ac);font-weight:700;padding:3px 10px;border-radius:20px;font-size:12.5px;white-space:nowrap}
+.low{color:var(--dg);font-weight:700}
+.n{text-align:right}
+/* ---- ADMIN ---- */
+.adm{display:flex;min-height:100vh}
+.side{width:230px;background:var(--side);color:#cfd8ea;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;flex-shrink:0}
+.side .logo{padding:18px 18px;font-weight:800;font-size:19px;color:#fff;display:flex;gap:10px;align-items:center;border-bottom:1px solid rgba(255,255,255,.08)}
+.side nav{flex:1;padding:10px 8px;overflow:auto}
+.side a{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:10px;color:#cfd8ea;text-decoration:none;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:2px}
+.side a:hover{background:rgba(255,255,255,.07)}.side a.on{background:rgba(255,255,255,.14);color:#fff;font-weight:700}
+.side .who{padding:12px 16px;border-top:1px solid rgba(255,255,255,.08);font-size:12.5px}
+.admmain{flex:1;min-width:0}
+.topbar{background:var(--card);border-bottom:1px solid var(--bd);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;gap:10px}
+.topbar h2{font-size:18px;font-weight:700;margin:0}
+.content{padding:20px}
+.kpi{border-radius:14px;color:#fff;padding:16px 18px;height:100%}
+.kpi small{opacity:.9;font-weight:600}.kpi b{display:block;font-size:24px;margin-top:2px}
+.k1{background:#0f766e}.k2{background:#1a7f3c}.k3{background:#c2410c}.k4{background:#2563eb}
+.burger{display:none}
+@media(max-width:860px){.side{position:fixed;left:-240px;z-index:200;transition:left .2s}.side.open{left:0}.burger{display:inline-block}.content{padding:12px}}
+.sc{overflow-x:auto}
+/* ---- PRINT ---- */
+#pr{display:none}
+@media print{html,body{background:#fff!important;color:#000!important}body>*:not(#pr){display:none!important}#pr{display:block!important;color:#000;background:#fff;padding:0}@page{size:A4 portrait;margin:12mm}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
 </head>
 <body>
 
-  <!-- Overlay: loading & error -->
-  <div id="loadingOverlay" class="loading-overlay">
-    <div id="overlayLoading" class="overlay-box">
-      <div class="spinner-border text-light" role="status"></div>
-      <p class="mt-3 mb-0">Memuat SIGAP...</p>
-    </div>
-    <div id="overlayError" class="overlay-box" style="display:none">
-      <i class="bi bi-exclamation-triangle-fill" style="font-size:36px"></i>
-      <p class="mt-3 mb-0 fw-semibold">Gagal memuat data</p>
-      <p id="overlayErrMsg" class="small mt-2 mb-0"></p>
-      <button class="btn-retry" onclick="loadInit()"><i class="bi bi-arrow-clockwise"></i> Coba Lagi</button>
-    </div>
-  </div>
+<div id="loading" class="loading-overlay"><div class="spinner-border text-light"></div><p class="mt-3">Memuat SIGAP...</p></div>
 
-  <!-- Header -->
-  <header class="app-header">
-    <div class="header-inner">
-      <div class="brand">
-        <div class="brand-icon"><i class="bi bi-box-seam-fill"></i></div>
-        <div>
-          <h1>SIGAP</h1>
-          <span>Pengambilan Barang — BPS Kabupaten Pesawaran</span>
-        </div>
+<!-- ========== PUBLIK ========== -->
+<div id="pub" class="hide">
+  <header class="app-header"><div class="header-inner">
+    <div class="brand"><div class="brand-icon"><i class="bi bi-box-seam-fill"></i></div>
+      <div><h1>SIGAP</h1><span>Pengambilan Barang — BPS Kabupaten Pesawaran</span></div></div>
+    <div class="d-flex gap-2">
+      <button class="hbtn" onclick="openLogin()"><i class="bi bi-shield-lock-fill"></i> Login Admin</button>
+      <button class="hbtn round" onclick="toggleTheme()" title="Mode gelap"><i class="bi bi-moon-stars-fill theme-ic"></i></button>
+    </div>
+  </div></header>
+  <nav class="tab-nav"><div class="tab-inner">
+    <button class="tab-btn active" data-p="ambil" onclick="pubTab('ambil')"><i class="bi bi-cart-plus-fill"></i> Ambil Barang</button>
+    <button class="tab-btn" data-p="riwayat" onclick="pubTab('riwayat')"><i class="bi bi-clock-history"></i> Riwayat</button>
+  </div></nav>
+  <main class="main-pub">
+    <section id="p-ambil" class="panel">
+      <h2 class="panel-title"><i class="bi bi-clipboard-check"></i> Formulir Pengambilan Barang</h2>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6"><label class="form-label">Seksi yang Mengambil <span class="text-danger">*</span></label>
+          <select id="pSeksi" class="form-select"></select></div>
+        <div class="col-md-6"><label class="form-label">Tanggal Pengambilan <span class="text-danger">*</span></label>
+          <input type="date" id="pTgl" class="form-control"></div>
       </div>
-      <button class="theme-toggle" onclick="toggleDarkMode()" title="Mode Gelap" aria-label="Ganti tema">
-        <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
-      </button>
-    </div>
-  </header>
-
-  <!-- Tab -->
-  <nav class="tab-nav">
-    <div class="tab-nav-inner">
-      <button class="tab-btn active" data-tab="ambil" onclick="navigateTo('ambil')">
-        <i class="bi bi-cart-plus-fill"></i> Ambil Barang
-      </button>
-      <button class="tab-btn" data-tab="riwayat" onclick="navigateTo('riwayat')">
-        <i class="bi bi-clock-history"></i> Riwayat
-      </button>
-    </div>
-  </nav>
-
-  <main class="app-main">
-
-    <!-- AMBIL BARANG -->
-    <section id="section-ambil" class="content-section active">
-      <div class="card-panel">
-        <h2 class="panel-title"><i class="bi bi-clipboard-check"></i> Formulir Pengambilan Barang</h2>
-
-        <div class="row g-3 mb-3">
-          <div class="col-md-6">
-            <label class="form-label" for="namaPengambil">Seksi yang Mengambil <span class="text-danger">*</span></label>
-            <select id="namaPengambil" class="form-select">
-              <option value="">-- Pilih Seksi --</option>
-            </select>
-          </div>
-          <div class="col-md-6">
-            <label class="form-label" for="tanggalAmbil">Tanggal Pengambilan <span class="text-danger">*</span></label>
-            <input type="date" id="tanggalAmbil" class="form-control">
-          </div>
-        </div>
-
-        <hr class="my-4">
-
-        <label class="form-label fw-semibold">Daftar Barang yang Diambil</label>
-        <div id="itemRows"></div>
-
-        <button type="button" class="btn btn-outline-add mt-2" onclick="tambahBarisBarang()">
-          <i class="bi bi-plus-circle"></i> Tambah Barang Lain
-        </button>
-
-        <div class="d-grid mt-4">
-          <button type="button" class="btn btn-submit" id="btnSubmit" onclick="submitForm()">
-            <i class="bi bi-send-check-fill"></i> Simpan Pengambilan
-          </button>
-        </div>
-      </div>
+      <hr class="my-4">
+      <label class="form-label fw-semibold">Daftar Barang yang Diambil</label>
+      <div id="pRows"></div>
+      <button class="btn btn-add mt-2" onclick="pubAddRow()"><i class="bi bi-plus-circle"></i> Tambah Barang Lain</button>
+      <div class="d-grid mt-4"><button class="btn btn-main" id="pBtn" onclick="pubSubmit()"><i class="bi bi-send-check-fill"></i> Simpan Pengambilan</button></div>
     </section>
-
-    <!-- RIWAYAT -->
-    <section id="section-riwayat" class="content-section">
-      <div class="card-panel">
-        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-          <h2 class="panel-title mb-0"><i class="bi bi-clock-history"></i> Riwayat Pengambilan</h2>
-          <div class="d-flex gap-2 align-items-center">
-            <input type="search" id="riwayatSearch" class="form-control form-control-sm search-input" placeholder="Cari seksi / barang...">
-            <button class="btn btn-refresh" onclick="loadRiwayat()" title="Muat ulang">
-              <i class="bi bi-arrow-clockwise"></i>
-            </button>
-          </div>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-riwayat">
-            <thead>
-              <tr>
-                <th>Tanggal</th>
-                <th>Seksi</th>
-                <th>Nama Barang</th>
-                <th class="text-center">Jumlah</th>
-                <th>Waktu Input</th>
-              </tr>
-            </thead>
-            <tbody id="riwayatBody">
-              <tr><td colspan="5" class="text-center empty-hint py-4">Memuat data...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <section id="p-riwayat" class="panel hide">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <h2 class="panel-title mb-0"><i class="bi bi-clock-history"></i> Riwayat Pengambilan</h2>
+        <button class="btn-soft" onclick="pubRiwayat()"><i class="bi bi-arrow-clockwise"></i> Muat Ulang</button></div>
+      <div class="sc"><table class="table tbl"><thead><tr><th>Tanggal</th><th>Seksi</th><th>Nama Barang</th><th class="text-center">Jumlah</th><th>Waktu Input</th></tr></thead>
+      <tbody id="pRiwayat"></tbody></table></div>
     </section>
-
   </main>
+</div>
 
-  <!-- Template baris barang -->
-  <template id="itemRowTemplate">
-    <div class="item-row">
-      <div class="row g-2 align-items-end">
-        <div class="col-7">
-          <label class="form-label small">Nama Barang</label>
-          <select class="form-select item-select"></select>
-        </div>
-        <div class="col-3">
-          <label class="form-label small">Jumlah (PCS)</label>
-          <input type="number" min="1" inputmode="numeric" class="form-control item-jumlah" placeholder="0">
-        </div>
-        <div class="col-2">
-          <button type="button" class="btn btn-remove w-100" onclick="hapusBarisBarang(this)" aria-label="Hapus baris">
-            <i class="bi bi-trash3"></i>
-          </button>
-        </div>
+<!-- ========== ADMIN ========== -->
+<div id="adm" class="adm hide">
+  <aside class="side" id="side">
+    <div class="logo"><i class="bi bi-box-seam-fill"></i> SIGAP</div>
+    <nav>
+      <a data-s="dash" class="on" onclick="go('dash')"><i class="bi bi-graph-up"></i> Dashboard</a>
+      <a data-s="barang" onclick="go('barang')"><i class="bi bi-box2"></i> Data Barang</a>
+      <a data-s="masuk" onclick="go('masuk')"><i class="bi bi-box-arrow-in-down"></i> Barang Masuk</a>
+      <a data-s="keluar" onclick="go('keluar')"><i class="bi bi-box-arrow-up"></i> Barang Keluar</a>
+      <a data-s="laporan" onclick="go('laporan')"><i class="bi bi-file-earmark-text"></i> Laporan</a>
+      <a data-s="setting" onclick="go('setting')"><i class="bi bi-gear-fill"></i> Pengaturan</a>
+    </nav>
+    <div class="who"><b id="whoNama"></b><br><a style="padding:6px 0;color:#9fb3d9" onclick="keluarPublik()"><i class="bi bi-house"></i> Halaman Publik</a></div>
+  </aside>
+  <div class="admmain">
+    <div class="topbar">
+      <div class="d-flex align-items-center gap-2"><button class="btn-soft burger" onclick="document.getElementById('side').classList.toggle('open')"><i class="bi bi-list"></i></button><h2 id="admTitle">Dashboard</h2></div>
+      <div class="d-flex gap-2">
+        <button class="btn-soft" onclick="reload()" title="Muat ulang data"><i class="bi bi-arrow-clockwise"></i></button>
+        <button class="btn-soft" onclick="toggleTheme()"><i class="bi bi-moon-stars-fill theme-ic"></i></button>
+        <button class="btn-del" onclick="logout()"><i class="bi bi-power"></i> Keluar</button>
       </div>
     </div>
-  </template>
+    <div class="content">
 
-  <!-- Toast -->
-  <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:2000">
-    <div id="appToast" class="toast" role="alert">
-      <div class="toast-header">
-        <strong class="me-auto" id="toastTitle">Notifikasi</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-      </div>
-      <div class="toast-body" id="toastBody"></div>
+      <section id="s-dash">
+        <div class="row g-3 mb-3">
+          <div class="col-6 col-lg-3"><div class="kpi k1"><small>Jenis Barang</small><b id="kJenis">0</b></div></div>
+          <div class="col-6 col-lg-3"><div class="kpi k2"><small>Total Stok</small><b id="kStok">0</b></div></div>
+          <div class="col-6 col-lg-3"><div class="kpi k3"><small>Stok Menipis</small><b id="kLow">0</b></div></div>
+          <div class="col-6 col-lg-3"><div class="kpi k4"><small>Nilai Persediaan</small><b id="kNilai">Rp0</b></div></div>
+        </div>
+        <div class="row g-3">
+          <div class="col-lg-7"><div class="panel"><div class="fw-bold mb-1">10 Barang Paling Banyak Keluar</div><div class="text-secondary small mb-2" id="chartSub"></div><div style="height:300px"><canvas id="chTop"></canvas></div></div></div>
+          <div class="col-lg-5"><div class="panel"><div class="fw-bold mb-1">Stok Perlu Perhatian</div><div class="text-secondary small mb-2" id="lowSub"></div><div id="lowList" style="max-height:300px;overflow:auto"></div></div></div>
+        </div>
+      </section>
+
+      <section id="s-barang" class="hide"><div class="panel">
+        <div class="d-flex flex-wrap gap-2 justify-content-between mb-3">
+          <input id="bCari" class="form-control" style="max-width:300px" placeholder="Cari kode / nama barang..." oninput="renderBarang()">
+          <div class="d-flex gap-2"><button class="btn-soft" onclick="exportBarang()"><i class="bi bi-file-earmark-excel"></i> Excel</button>
+          <button class="btn-main px-3" style="padding:8px" onclick="editBarang()"><i class="bi bi-plus-lg"></i> Tambah Barang</button></div></div>
+        <div class="sc"><table class="table tbl"><thead><tr><th>No</th><th>Kode</th><th>Nama Barang</th><th class="n">Stok Awal</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Stok</th><th class="n">Harga (Rp)</th><th class="n">Nilai (Rp)</th><th>Status</th><th></th></tr></thead><tbody id="bBody"></tbody></table></div>
+        <div class="small text-secondary mt-2">Semua satuan = Pcs. Stok = Stok Awal + Masuk − Keluar (transaksi setelah tanggal saldo awal di Pengaturan).</div>
+      </div></section>
+
+      <section id="s-masuk" class="hide"><div class="panel">
+        <div class="d-flex flex-wrap gap-2 justify-content-between mb-3">
+          <input id="mBln" type="month" class="form-control" style="max-width:200px" oninput="renderMasuk()">
+          <button class="btn-main px-3" style="padding:8px" onclick="formMasuk()"><i class="bi bi-plus-lg"></i> Tambah Barang Masuk</button></div>
+        <div class="sc"><table class="table tbl"><thead><tr><th>Tanggal</th><th>Kode</th><th>Nama Barang</th><th>Keterangan / Pemasok</th><th class="n">Jumlah</th><th class="n">Harga (Rp)</th><th class="n">Total (Rp)</th><th></th></tr></thead><tbody id="mBody"></tbody></table></div>
+      </div></section>
+
+      <section id="s-keluar" class="hide"><div class="panel">
+        <div class="d-flex flex-wrap gap-2 justify-content-between mb-3">
+          <div class="d-flex gap-2 flex-wrap"><input id="kBln" type="month" class="form-control" style="max-width:190px" oninput="renderKeluar()">
+            <select id="kSeksi" class="form-select" style="max-width:200px" onchange="renderKeluar()"></select>
+            <input id="kCari" class="form-control" style="max-width:210px" placeholder="Cari barang..." oninput="renderKeluar()"></div>
+          <button class="btn-main px-3" style="padding:8px" onclick="formKeluar()"><i class="bi bi-plus-lg"></i> Tambah Barang Keluar</button></div>
+        <div class="sc"><table class="table tbl"><thead><tr><th>Tanggal</th><th>Seksi / Tim</th><th>Barang</th><th class="n">Item</th><th class="n">Total Unit</th><th class="n">Nilai (Rp)</th><th></th></tr></thead><tbody id="kBody"></tbody></table></div>
+      </div></section>
+
+      <section id="s-laporan" class="hide"><div class="panel">
+        <div class="d-flex flex-wrap gap-2 justify-content-between mb-3">
+          <div class="d-flex gap-2 align-items-center"><label class="form-label mb-0">Periode</label><input id="lBln" type="month" class="form-control" style="max-width:200px" oninput="renderLaporan()"></div>
+          <div class="d-flex gap-2"><button class="btn-soft" onclick="cetakRekap()"><i class="bi bi-printer"></i> Cetak</button><button class="btn-soft" onclick="exportLaporan()"><i class="bi bi-file-earmark-excel"></i> Excel</button></div></div>
+        <div class="fw-bold mb-2">Rekap per Barang <span class="text-secondary small fw-normal" id="lLabel"></span></div>
+        <div class="sc"><table class="table tbl" id="lTab1"><thead><tr><th>No</th><th>Kode</th><th>Nama Barang</th><th class="n">Stok Awal</th><th class="n">Masuk</th><th class="n">Keluar</th><th class="n">Stok Akhir</th><th class="n">Nilai (Rp)</th></tr></thead><tbody id="lBody"></tbody></table></div>
+        <div class="fw-bold mt-4 mb-2">Rekap per Seksi / Tim</div>
+        <div class="sc"><table class="table tbl" id="lTab2" style="max-width:640px"><thead><tr><th>Seksi / Tim</th><th class="n">Jumlah Bon</th><th class="n">Jenis Barang</th><th class="n">Total Unit</th><th class="n">Nilai (Rp)</th></tr></thead><tbody id="lBody2"></tbody></table></div>
+      </div></section>
+
+      <section id="s-setting" class="hide">
+        <div class="panel"><h3 class="panel-title">Penandatangan Form Cetak</h3>
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label">Operator Persediaan</label><input id="sOp" class="form-control"></div>
+            <div class="col-md-6"><label class="form-label">Kasubbag Umum</label><input id="sKs" class="form-control"></div>
+          </div>
+          <div class="fw-semibold mt-4 mb-2">Ketua Tim per Seksi (Penanggung Jawab)</div>
+          <div class="row g-3" id="sKetua"></div>
+          <hr class="my-4">
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label">Tanggal saldo awal (posisi "Stok Sistem")</label><input type="date" id="sTgl" class="form-control"><div class="form-text">Hanya transaksi setelah tanggal ini yang mengubah stok.</div></div>
+            <div class="col-md-6"><label class="form-label">Batas stok menipis (≤)</label><input type="number" min="0" id="sMin" class="form-control"></div>
+          </div>
+          <button class="btn btn-main mt-4 px-4" onclick="saveSet()"><i class="bi bi-save"></i> Simpan Pengaturan</button>
+        </div>
+        <div class="panel" style="max-width:520px"><h3 class="panel-title">Ganti Password</h3>
+          <label class="form-label">Password lama</label><input type="password" id="pwLama" class="form-control mb-2">
+          <label class="form-label">Password baru (min. 8 karakter)</label><input type="password" id="pwBaru" class="form-control mb-3">
+          <button class="btn btn-main px-4" onclick="gantiPw()">Ganti Password</button></div>
+      </section>
     </div>
   </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/config.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/app.js"></script>
+<!-- Modal login -->
+<div class="modal fade" id="mdLogin" tabindex="-1"><div class="modal-dialog modal-dialog-centered modal-sm"><div class="modal-content" style="background:var(--card);color:var(--tx);border-radius:16px">
+  <div class="modal-body p-4">
+    <h5 class="fw-bold mb-3"><i class="bi bi-shield-lock-fill text-primary"></i> Login Admin</h5>
+    <label class="form-label">Username</label><input id="lgU" class="form-control mb-2" autocomplete="username">
+    <label class="form-label">Password</label><input id="lgP" type="password" class="form-control mb-3" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="d-grid"><button class="btn btn-main" id="lgBtn" onclick="doLogin()">Masuk</button></div>
+  </div></div></div></div>
+
+<!-- Modal form (keluar / masuk / barang) -->
+<div class="modal fade" id="mdForm" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-scrollable"><div class="modal-content" style="background:var(--card);color:var(--tx);border-radius:16px">
+  <div class="modal-header"><h5 class="modal-title fw-bold" id="mfTitle"></h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+  <div class="modal-body" id="mfBody"></div>
+  <div class="modal-footer"><button class="btn btn-light" data-bs-dismiss="modal">Batal</button><button class="btn btn-main px-4" id="mfSave">Simpan</button></div>
+</div></div></div>
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:5000"><div id="toast" class="toast"><div class="toast-header"><strong class="me-auto" id="tTitle"></strong><button class="btn-close" data-bs-dismiss="toast"></button></div><div class="toast-body" id="tBody"></div></div></div>
+
+<div id="pr"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+/* ============ KONFIGURASI ============ */
+const API_URL = 'GANTI_DENGAN_URL_WEB_APP_GAS';   // https://script.google.com/macros/s/XXXX/exec
+const LOGO = 'data:image/jpeg;base64,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';
+const BLN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+/* ============ UTIL ============ */
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = n => Number(n || 0).toLocaleString('id-ID');
+const rp = n => 'Rp' + Math.round(n || 0).toLocaleString('id-ID');
+const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+const dmy = y => { const m = String(y).match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? `${m[3]}/${m[2]}/${m[1]}` : y; };
+const longDate = y => { const m = String(y).match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? `${+m[3]} ${BLN[+m[2]-1]} ${m[1]}` : y; };
+let toastObj;
+function toast(title, msg, type) {
+  const el = $('toast'); $('tTitle').textContent = title; $('tBody').textContent = msg;
+  el.className = 'toast ' + ({success:'text-bg-success',danger:'text-bg-danger',warning:'text-bg-warning'}[type] || '');
+  bootstrap.Toast.getOrCreateInstance(el, {delay: 3500}).show();
+}
+function busy(btn, on, html) { if (on) { btn._h = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> ' + (html || 'Memproses...'); } else { btn.disabled = false; btn.innerHTML = btn._h; } }
+
+async function apiGet(action) {
+  const r = await fetch(API_URL + '?action=' + action);
+  return r.json();
+}
+async function apiPost(action, payload) {
+  const r = await fetch(API_URL, { method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify(Object.assign({action}, payload || {})) });
+  return r.json();
+}
+async function adminApi(action, data) {
+  const res = await apiPost(action, { token: sessionStorage.getItem('sigap_token'), data });
+  if (res.code === 'AUTH') { toast('Sesi berakhir', res.message, 'warning'); showPublic(); }
+  return res;
+}
+
+/* ============ TEMA ============ */
+function applyTheme(t) { document.documentElement.setAttribute('data-theme', t); document.querySelectorAll('.theme-ic').forEach(i => i.className = 'bi theme-ic ' + (t === 'dark' ? 'bi-sun-fill' : 'bi-moon-stars-fill')); }
+function toggleTheme() { const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'; try { localStorage.setItem('sigap-theme', t); } catch (e) {} applyTheme(t); }
+
+/* ============ PUBLIK ============ */
+let PUB = { barang: [], seksi: [] };
+async function initPublic() {
+  $('loading').classList.remove('hide');
+  try {
+    const res = await apiGet('getInit');
+    if (!res.success) throw new Error(res.message);
+    PUB = res.data;
+    $('pSeksi').innerHTML = '<option value="">-- Pilih Seksi --</option>' + PUB.seksi.map(s => `<option>${esc(s)}</option>`).join('');
+    $('pTgl').value = today();
+    $('pRows').innerHTML = ''; pubAddRow();
+  } catch (e) { toast('Gagal memuat data', e.message, 'danger'); }
+  $('loading').classList.add('hide');
+}
+function pubTab(t) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.p === t));
+  $('p-ambil').classList.toggle('hide', t !== 'ambil'); $('p-riwayat').classList.toggle('hide', t !== 'riwayat');
+  if (t === 'riwayat') pubRiwayat();
+}
+function barangOpts(withStok) {
+  return '<option value="">-- Pilih Barang --</option>' + PUB.barang.map(b => `<option value="${esc(b.kode)}">${esc(b.nama)}${withStok ? ' (stok ' + b.stok + ')' : ''}</option>`).join('');
+}
+function pubAddRow() {
+  const d = document.createElement('div'); d.className = 'item-row';
+  d.innerHTML = `<div class="row g-2 align-items-end"><div class="col-12 col-sm-7"><label class="form-label small">Nama Barang</label><select class="form-select i-kode">${barangOpts(true)}</select></div>
+    <div class="col-8 col-sm-3"><label class="form-label small">Jumlah (PCS)</label><input type="number" min="1" class="form-control i-qty" placeholder="0"></div>
+    <div class="col-4 col-sm-2"><button class="btn-del w-100 i-del" style="height:42px" type="button"><i class="bi bi-trash3"></i></button></div></div>`;
+  d.querySelector('.i-del').onclick = () => { d.remove(); pubRemBtns(); };
+  $('pRows').appendChild(d); pubRemBtns();
+}
+function pubRemBtns() { const r = document.querySelectorAll('#pRows .item-row'); r.forEach(x => x.querySelector('.i-del').style.display = r.length > 1 ? 'block' : 'none'); }
+async function pubSubmit() {
+  const seksi = $('pSeksi').value, tanggal = $('pTgl').value;
+  if (!seksi) return toast('Peringatan', 'Seksi yang mengambil wajib dipilih.', 'warning');
+  if (!tanggal) return toast('Peringatan', 'Tanggal pengambilan wajib diisi.', 'warning');
+  const items = []; let ok = true;
+  document.querySelectorAll('#pRows .item-row').forEach(r => {
+    const kode = r.querySelector('.i-kode').value, jumlah = parseInt(r.querySelector('.i-qty').value, 10);
+    if (!kode || !(jumlah > 0)) ok = false; else items.push({kode, jumlah});
+  });
+  if (!ok || !items.length) return toast('Peringatan', 'Pastikan setiap baris barang sudah dipilih dan jumlahnya lebih dari 0.', 'warning');
+  const btn = $('pBtn'); busy(btn, true, 'Menyimpan...');
+  try {
+    const res = await apiPost('submitPengambilan', { data: { seksi, tanggal, items } });
+    if (res.success) { toast('Berhasil', res.message, 'success'); $('pSeksi').value = ''; $('pRows').innerHTML = ''; await initPublic(); }
+    else toast('Gagal', res.message, 'danger');
+  } catch (e) { toast('Error', e.message, 'danger'); }
+  busy(btn, false);
+}
+async function pubRiwayat() {
+  const tb = $('pRiwayat'); tb.innerHTML = '<tr><td colspan="5" class="text-center text-secondary py-4">Memuat data...</td></tr>';
+  try {
+    const res = await apiGet('getRiwayat');
+    if (!res.success) { tb.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4">${esc(res.message)}</td></tr>`; return; }
+    tb.innerHTML = res.data.length ? res.data.map(r => `<tr><td>${esc(r.tanggal)}</td><td>${esc(r.seksi)}</td><td>${esc(r.barang)}</td><td class="text-center"><span class="pill">${esc(r.jumlah)} pcs</span></td><td class="text-secondary">${esc(r.waktu)}</td></tr>`).join('')
+      : '<tr><td colspan="5" class="text-center text-secondary py-4">Belum ada riwayat pengambilan.</td></tr>';
+  } catch (e) { tb.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4">${esc(e.message)}</td></tr>`; }
+}
+
+/* ============ LOGIN ============ */
+let mdLogin;
+function openLogin() { mdLogin = mdLogin || new bootstrap.Modal($('mdLogin')); $('lgP').value = ''; mdLogin.show(); setTimeout(() => $('lgU').focus(), 300); }
+async function doLogin() {
+  const u = $('lgU').value.trim(), p = $('lgP').value;
+  if (!u || !p) return toast('Peringatan', 'Isi username dan password.', 'warning');
+  const btn = $('lgBtn'); busy(btn, true, 'Masuk...');
+  try {
+    const res = await apiPost('login', { username: u, password: p });
+    if (!res.success) toast('Gagal', res.message, 'danger');
+    else { sessionStorage.setItem('sigap_token', res.data.token); mdLogin.hide(); await showAdmin(); }
+  } catch (e) { toast('Error', e.message, 'danger'); }
+  busy(btn, false);
+}
+async function logout() { try { await adminApi('logout'); } catch (e) {} showPublic(); }
+function showPublic() { sessionStorage.removeItem('sigap_token'); $('adm').classList.add('hide'); $('pub').classList.remove('hide'); initPublic(); }
+function keluarPublik() { $('adm').classList.add('hide'); $('pub').classList.remove('hide'); initPublic(); }
+
+/* ============ ADMIN ============ */
+let D = null, CUR = 'dash', chTop = null;
+const TITLES = { dash:'Dashboard', barang:'Data Barang', masuk:'Barang Masuk', keluar:'Barang Keluar', laporan:'Laporan', setting:'Pengaturan' };
+async function showAdmin() {
+  $('loading').classList.remove('hide');
+  const ok = await reload(true);
+  $('loading').classList.add('hide');
+  if (!ok) return;
+  $('pub').classList.add('hide'); $('adm').classList.remove('hide'); go('dash');
+}
+async function reload(silent) {
+  const res = await adminApi('adminData');
+  if (!res.success) { if (res.code !== 'AUTH') toast('Gagal', res.message, 'danger'); return false; }
+  D = res.data; $('whoNama').textContent = D.user.nama;
+  D.byKode = {}; D.barang.forEach(b => D.byKode[b.kode] = b);
+  $('kSeksi').innerHTML = '<option value="">Semua seksi</option>' + D.seksi.map(s => `<option>${esc(s)}</option>`).join('');
+  renderAll(); if (!silent) toast('Data diperbarui', '', 'success');
+  return true;
+}
+function go(s) {
+  CUR = s; document.querySelectorAll('.side a[data-s]').forEach(a => a.classList.toggle('on', a.dataset.s === s));
+  Object.keys(TITLES).forEach(k => $('s-' + k).classList.toggle('hide', k !== s));
+  $('admTitle').textContent = TITLES[s]; $('side').classList.remove('open'); renderAll();
+}
+function renderAll() {
+  if (!D) return;
+  ({ dash: renderDash, barang: renderBarang, masuk: renderMasuk, keluar: renderKeluar, laporan: renderLaporan, setting: renderSetting })[CUR]();
+}
+
+/* ---- Dashboard ---- */
+function renderDash() {
+  const min = D.settings.STOK_MIN, act = D.barang.filter(b => b.aktif);
+  $('kJenis').textContent = act.length;
+  $('kStok').textContent = num(act.reduce((s, b) => s + b.stok, 0));
+  const low = act.filter(b => b.stok <= min).sort((a, b) => a.stok - b.stok);
+  $('kLow').textContent = low.length;
+  $('kNilai').textContent = rp(act.reduce((s, b) => s + b.stok * b.harga, 0));
+  $('lowSub').textContent = `Stok ≤ ${min} pcs`;
+  $('lowList').innerHTML = low.length ? '<table class="table tbl"><tbody>' + low.map(b => `<tr><td>${esc(b.nama)}</td><td class="n low">${b.stok}</td></tr>`).join('') + '</tbody></table>' : '<div class="text-secondary text-center py-5">Semua stok di atas batas minimum.</div>';
+  const ym = today().slice(0, 7), tot = {};
+  D.keluar.forEach(t => { if (t.tgl.slice(0, 7) === ym) tot[t.nama] = (tot[t.nama] || 0) + t.jumlah; });
+  let top = Object.entries(tot).sort((a, b) => b[1] - a[1]).slice(0, 10), sub = BLN[+ym.slice(5) - 1] + ' ' + ym.slice(0, 4);
+  if (!top.length) { const all = {}; D.keluar.forEach(t => all[t.nama] = (all[t.nama] || 0) + t.jumlah); top = Object.entries(all).sort((a, b) => b[1] - a[1]).slice(0, 10); sub = 'Semua periode (belum ada pengambilan bulan ini)'; }
+  $('chartSub').textContent = sub;
+  if (chTop) chTop.destroy();
+  chTop = new Chart($('chTop'), { type: 'bar', data: { labels: top.map(x => x[0].length > 26 ? x[0].slice(0, 25) + '…' : x[0]), datasets: [{ data: top.map(x => x[1]), backgroundColor: '#2e5395', borderRadius: 6 }] },
+    options: { indexAxis: 'y', maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { precision: 0 } } } } });
+}
+
+/* ---- Data Barang ---- */
+function renderBarang() {
+  const q = $('bCari').value.toLowerCase(), min = D.settings.STOK_MIN; let i = 0;
+  $('bBody').innerHTML = D.barang.filter(b => !q || (b.kode + ' ' + b.nama).toLowerCase().includes(q)).map(b => `<tr>
+    <td>${++i}</td><td>${esc(b.kode)}</td><td>${esc(b.nama)}</td><td class="n">${num(b.saldo)}</td><td class="n">${num(b.masuk)}</td><td class="n">${num(b.keluar)}</td>
+    <td class="n ${b.stok <= min ? 'low' : ''}">${num(b.stok)}</td><td class="n">${b.harga ? num(b.harga) : '<span class="low">belum</span>'}</td><td class="n">${num(b.stok * b.harga)}</td>
+    <td><span class="pill">${b.aktif ? 'Aktif' : 'Nonaktif'}</span></td><td><button class="btn-soft" onclick="editBarang('${esc(b.kode)}')"><i class="bi bi-pencil"></i></button></td></tr>`).join('') || '<tr><td colspan="11" class="text-center text-secondary py-4">Tidak ada data.</td></tr>';
+}
+function exportBarang() {
+  const r = [['No','Kode Barang','Nama Barang','Satuan','Stok Awal','Masuk','Keluar','Stok','Harga Satuan','Nilai']];
+  D.barang.forEach((b, i) => r.push([i + 1, b.kode, b.nama, 'Pcs', b.saldo, b.masuk, b.keluar, b.stok, b.harga, b.stok * b.harga]));
+  xl([{ name: 'Stok Barang', rows: r }], 'stok-barang-' + today() + '.xlsx');
+}
+
+/* ---- Modal generik ---- */
+let mdForm, onSave = null;
+function openForm(title, html, save) { mdForm = mdForm || new bootstrap.Modal($('mdForm')); $('mfTitle').textContent = title; $('mfBody').innerHTML = html; onSave = save; mdForm.show(); }
+$('mfSave').onclick = async () => { if (!onSave) return; const b = $('mfSave'); busy(b, true, 'Menyimpan...'); try { await onSave(); } catch (e) { toast('Error', e.message, 'danger'); } busy(b, false); };
+function itemRowHtml(withHarga) {
+  const opts = '<option value="">-- Pilih Barang --</option>' + D.barang.filter(b => b.aktif).map(b => `<option value="${esc(b.kode)}" data-stok="${b.stok}" data-h="${b.harga}">${esc(b.nama)} (stok ${b.stok})</option>`).join('');
+  return `<div class="item-row"><div class="row g-2 align-items-end"><div class="col-12 ${withHarga ? 'col-md-5' : 'col-md-8'}"><label class="form-label small">Barang</label><select class="form-select f-kode">${opts}</select></div>
+    <div class="col-5 col-md-2"><label class="form-label small">Jumlah</label><input type="number" min="1" class="form-control f-qty"></div>
+    ${withHarga ? '<div class="col-5 col-md-3"><label class="form-label small">Harga Satuan</label><input type="number" min="0" class="form-control f-harga"></div>' : ''}
+    <div class="col-2 col-md-2"><button type="button" class="btn-del w-100 f-del" style="height:42px"><i class="bi bi-trash3"></i></button></div></div></div>`;
+}
+function wireRows(withHarga) {
+  const box = $('fRows');
+  const add = () => {
+    box.insertAdjacentHTML('beforeend', itemRowHtml(withHarga)); const r = box.lastElementChild;
+    r.querySelector('.f-del').onclick = () => { if (box.children.length > 1) r.remove(); };
+    if (withHarga) r.querySelector('.f-kode').onchange = e => { const o = e.target.selectedOptions[0]; if (o && o.dataset.h) r.querySelector('.f-harga').value = o.dataset.h; };
+  };
+  $('fAdd').onclick = add; add();
+}
+function readRows(withHarga) {
+  const items = [];
+  document.querySelectorAll('#fRows .item-row').forEach(r => {
+    const kode = r.querySelector('.f-kode').value, jumlah = parseInt(r.querySelector('.f-qty').value, 10);
+    if (!kode && !r.querySelector('.f-qty').value) return;
+    if (!kode || !(jumlah > 0)) throw new Error('Lengkapi barang dan jumlah (> 0) di setiap baris.');
+    const it = { kode, jumlah }; if (withHarga) it.harga = Number(r.querySelector('.f-harga').value) || 0; items.push(it);
+  });
+  if (!items.length) throw new Error('Minimal 1 barang harus diisi.');
+  return items;
+}
+
+/* ---- Barang Keluar ---- */
+function bonList() {
+  const m = new Map();
+  D.keluar.forEach(t => { const k = t.waktu + '|' + t.seksi + '|' + (t.waktu ? '' : t.tgl); if (!m.has(k)) m.set(k, { key: k, waktu: t.waktu, tgl: t.tgl, seksi: t.seksi, keperluan: t.keperluan, rows: [] }); m.get(k).rows.push(t); });
+  return [...m.values()].sort((a, b) => a.tgl < b.tgl ? 1 : a.tgl > b.tgl ? -1 : b.waktu - a.waktu);
+}
+function harga(kode) { return (D.byKode[kode] || {}).harga || 0; }
+function renderKeluar() {
+  const bln = $('kBln').value, sk = $('kSeksi').value, q = $('kCari').value.toLowerCase();
+  window._bons = bonList().filter(b => (!bln || b.tgl.slice(0, 7) === bln) && (!sk || b.seksi === sk) && (!q || b.rows.some(r => r.nama.toLowerCase().includes(q))));
+  $('kBody').innerHTML = window._bons.map((b, i) => `<tr><td>${dmy(b.tgl)}</td><td>${esc(b.seksi)}</td>
+    <td>${b.rows.map(r => `<div>${esc(r.nama)} <span class="pill">${r.jumlah}</span></div>`).join('')}</td>
+    <td class="n">${b.rows.length}</td><td class="n">${num(b.rows.reduce((s, r) => s + r.jumlah, 0))}</td><td class="n">${num(b.rows.reduce((s, r) => s + r.jumlah * harga(r.kode), 0))}</td>
+    <td class="text-nowrap"><button class="btn-soft" onclick="cetakBon(${i})"><i class="bi bi-printer"></i> Cetak</button> ${b.waktu ? `<button class="btn-del" onclick="hapusBon(${i})"><i class="bi bi-trash3"></i></button>` : ''}</td></tr>`).join('')
+    || '<tr><td colspan="7" class="text-center text-secondary py-4">Tidak ada data.</td></tr>';
+}
+function formKeluar() {
+  openForm('Tambah Barang Keluar', `<div class="row g-3 mb-3"><div class="col-md-5"><label class="form-label">Seksi / Tim <span class="text-danger">*</span></label><select id="fSeksi" class="form-select">${D.seksi.map(s => `<option>${esc(s)}</option>`).join('')}</select></div>
+    <div class="col-md-3"><label class="form-label">Tanggal <span class="text-danger">*</span></label><input type="date" id="fTgl" class="form-control" value="${today()}"></div>
+    <div class="col-md-4"><label class="form-label">Keperluan</label><input id="fKep" class="form-control" maxlength="200"></div></div>
+    <div id="fRows"></div><button type="button" class="btn-add mt-1" id="fAdd"><i class="bi bi-plus-circle"></i> Tambah Barang</button>`,
+    async () => {
+      const res = await adminApi('saveBarangKeluar', { seksi: $('fSeksi').value, tanggal: $('fTgl').value, keperluan: $('fKep').value, items: readRows(false) });
+      if (!res.success) return toast('Gagal', res.message, 'danger');
+      mdForm.hide(); toast('Berhasil', res.message, 'success'); await reload(true);
+    });
+  wireRows(false);
+}
+async function hapusBon(i) {
+  const b = window._bons[i]; if (!confirm(`Hapus bon ${b.seksi} tanggal ${dmy(b.tgl)} (${b.rows.length} barang)? Stok akan kembali.`)) return;
+  const res = await adminApi('deleteBon', { waktu: b.waktu, seksi: b.seksi });
+  toast(res.success ? 'Berhasil' : 'Gagal', res.message, res.success ? 'success' : 'danger'); if (res.success) await reload(true);
+}
+
+/* ---- Cetak Form Permintaan Barang Persediaan ---- */
+function printHTML(html) {
+  const pr = $('pr'); pr.innerHTML = html; const im = pr.getElementsByTagName('img'); let n = im.length, c = 0, done = false;
+  const go = () => { if (!done) { done = true; window.print(); } }, f = () => { if (++c >= n) go(); };
+  if (!n) return go(); setTimeout(go, 1000); for (const x of im) { if (x.complete) f(); else { x.onload = f; x.onerror = f; } }
+}
+function cetakBon(i) {
+  const b = window._bons[i], S = D.settings, ketua = (S.KETUA_TIM && S.KETUA_TIM[b.seksi]) || '';
+  const c = 'border:1px solid #000;padding:4px 6px;', th = 'border:1px solid #000;padding:5px 6px;text-align:center;font-weight:700;';
+  const n = Math.max(10, b.rows.length); let tot = 0, rows = '';
+  for (let k = 0; k < n; k++) {
+    const t = b.rows[k], h = t ? harga(t.kode) : 0, jm = t ? t.jumlah * h : 0; tot += jm;
+    rows += `<tr style="height:22px"><td style="${c}text-align:center">${k + 1}</td><td style="${c}">${t ? esc(t.nama) : ''}</td><td style="${c}text-align:center;font-size:10.5px">${t ? esc(t.kode) : ''}</td><td style="${c}text-align:center">${t ? 'pcs' : ''}</td><td style="${c}text-align:right">${t ? num(t.jumlah) : ''}</td><td style="${c}text-align:right">${t ? num(h) : ''}</td><td style="${c}text-align:right">${t ? num(jm) : ''}</td></tr>`;
+  }
+  const bl = 'color:#1b7fd0;font-style:italic;font-weight:700', u = 'font-weight:700;text-decoration:underline';
+  printHTML(`<div style="border:2px solid #1b9ae0;padding:12px 16px;font:12px Arial,Helvetica,sans-serif;color:#000">
+  <div style="display:flex;align-items:center;gap:10px"><img alt="" src="${LOGO}" style="height:52px;width:auto"><div style="${bl};font-size:17px;line-height:1.25">BADAN PUSAT STATISTIK<br>KABUPATEN PESAWARAN</div></div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;margin:12px 0 5px;font-size:14px;font-weight:700"><span>Form Permintaan Barang Persediaan</span><span>No. Bon : ................................................</span></div>
+  <table style="width:100%;border-collapse:collapse;table-layout:fixed"><thead><tr><th style="${th}width:5%">No.</th><th style="${th}width:33%">Nama Barang</th><th style="${th}width:17%">Kode Barang</th><th style="${th}width:8%">Satuan</th><th style="${th}width:11%">Banyaknya</th><th style="${th}width:13%">Harga Satuan</th><th style="${th}width:13%">Jumlah</th></tr></thead><tbody>${rows}
+  <tr style="height:26px"><td colspan="4" style="${c}text-align:center">Jumlah</td><td style="${c}"></td><td style="${c}background:#c0c0c0!important"></td><td style="${c}text-align:right;font-weight:700">${num(tot)}</td></tr></tbody></table>
+  <div style="border:1px solid #000;border-top:0;padding:5px 8px;height:48px"><span style="${bl}">Keperluan :</span> ${esc(b.keperluan)}</div>
+  <div style="display:flex;margin-top:18px">
+    <div style="flex:1"><div style="height:18px"></div><div>Dibukukan Tgl. : ……………………………….</div><div style="font-style:italic">Operator Persediaan</div><div style="height:56px"></div><div style="${u}">${esc(S.OPERATOR_NAMA)}</div></div>
+    <div style="flex:1;text-align:center"><div style="height:18px"></div><div>Mengetahui/Menyetujui :</div><div>Kasubbag Umum,</div><div style="height:56px"></div><div style="${u}">${esc(S.KASUBAG_NAMA)}</div></div>
+    <div style="flex:1;text-align:right"><div style="height:18px">Gedong Tataan, ${esc(longDate(b.tgl))}</div><div>Penanggung Jawab,</div><div>Ketua Tim ${esc(b.seksi)}</div><div style="height:38px"></div><div style="${u}">${esc(ketua)}</div></div>
+  </div></div>`);
+}
+
+/* ---- Barang Masuk ---- */
+function renderMasuk() {
+  const bln = $('mBln').value, list = D.masuk.filter(t => !bln || t.tgl.slice(0, 7) === bln);
+  $('mBody').innerHTML = list.map(t => `<tr><td>${dmy(t.tgl)}</td><td>${esc(t.kode)}</td><td>${esc(t.nama)}</td><td>${esc(t.ket || '-')}</td><td class="n">${num(t.jumlah)}</td><td class="n">${num(t.harga)}</td><td class="n">${num(t.jumlah * t.harga)}</td>
+    <td><button class="btn-del" onclick="hapusMasuk('${esc(t.id)}')"><i class="bi bi-trash3"></i></button></td></tr>`).join('') || '<tr><td colspan="8" class="text-center text-secondary py-4">Belum ada barang masuk.</td></tr>';
+}
+function formMasuk() {
+  openForm('Tambah Barang Masuk', `<div class="row g-3 mb-3"><div class="col-md-4"><label class="form-label">Tanggal <span class="text-danger">*</span></label><input type="date" id="fTgl" class="form-control" value="${today()}"></div>
+    <div class="col-md-8"><label class="form-label">Keterangan / Pemasok</label><input id="fKet" class="form-control" maxlength="200" placeholder="Opsional"></div></div>
+    <div id="fRows"></div><button type="button" class="btn-add mt-1" id="fAdd"><i class="bi bi-plus-circle"></i> Tambah Barang</button>`,
+    async () => {
+      const res = await adminApi('saveBarangMasuk', { tanggal: $('fTgl').value, keterangan: $('fKet').value, items: readRows(true) });
+      if (!res.success) return toast('Gagal', res.message, 'danger');
+      mdForm.hide(); toast('Berhasil', res.message, 'success'); await reload(true);
+    });
+  wireRows(true);
+}
+async function hapusMasuk(id) {
+  if (!confirm('Hapus data barang masuk ini? Stok akan berkurang.')) return;
+  const res = await adminApi('deleteMasuk', { id });
+  toast(res.success ? 'Berhasil' : 'Gagal', res.message, res.success ? 'success' : 'danger'); if (res.success) await reload(true);
+}
+
+/* ---- Edit Barang ---- */
+function editBarang(kode) {
+  const b = kode ? D.byKode[kode] : { kode: '', nama: '', saldo: 0, harga: 0, aktif: true }, baru = !kode;
+  openForm(baru ? 'Tambah Barang' : 'Edit Barang', `<div class="row g-3">
+    <div class="col-md-5"><label class="form-label">Kode Barang</label><input id="eKode" class="form-control" value="${esc(b.kode)}" ${baru ? '' : 'readonly'}></div>
+    <div class="col-md-7"><label class="form-label">Nama Barang</label><input id="eNama" class="form-control" value="${esc(b.nama)}"></div>
+    <div class="col-md-4"><label class="form-label">Satuan</label><input class="form-control" value="Pcs" readonly></div>
+    <div class="col-md-4"><label class="form-label">Stok Awal (Stok Sistem)</label><input type="number" min="0" id="eSaldo" class="form-control" value="${b.saldo}"></div>
+    <div class="col-md-4"><label class="form-label">Harga Satuan (Rp)</label><input type="number" min="0" id="eHarga" class="form-control" value="${b.harga}"></div>
+    <div class="col-md-4"><label class="form-label">Status</label><select id="eAktif" class="form-select"><option value="1" ${b.aktif ? 'selected' : ''}>Aktif</option><option value="0" ${b.aktif ? '' : 'selected'}>Nonaktif</option></select></div></div>`,
+    async () => {
+      const res = await adminApi('saveBarang', { baru, kode: $('eKode').value, nama: $('eNama').value, saldo: $('eSaldo').value, harga: $('eHarga').value, aktif: $('eAktif').value === '1' });
+      if (!res.success) return toast('Gagal', res.message, 'danger');
+      mdForm.hide(); toast('Berhasil', res.message, 'success'); await reload(true);
+    });
+}
+
+/* ---- Laporan ---- */
+function laporanData() {
+  const m = $('lBln').value, cut = D.settings.TGL_SALDO_AWAL;
+  const st = m ? m + '-01' : '', en = m ? m + '-31' : '9999-12-31', R = [], P = {};
+  D.barang.forEach((b, i) => {
+    let awal = b.saldo, mm = 0, kk = 0;
+    D.masuk.forEach(t => { if (t.kode !== b.kode || t.tgl <= cut) return; if (m && t.tgl < st) awal += t.jumlah; else if (t.tgl <= en) mm += t.jumlah; });
+    D.keluar.forEach(t => { if (t.kode !== b.kode || t.tgl <= cut) return; if (m && t.tgl < st) awal -= t.jumlah; else if (t.tgl <= en) kk += t.jumlah; });
+    R.push([i + 1, b.kode, b.nama, awal, mm, kk, awal + mm - kk, (awal + mm - kk) * b.harga]);
+  });
+  const bons = {};
+  D.keluar.forEach(t => { if (m && t.tgl.slice(0, 7) !== m) return; const o = P[t.seksi] || (P[t.seksi] = { bon: new Set(), k: new Set(), q: 0, v: 0 }); o.bon.add(t.waktu + '|' + t.tgl); o.k.add(t.kode); o.q += t.jumlah; o.v += t.jumlah * harga(t.kode); });
+  return { m, R, P };
+}
+function renderLaporan() {
+  const d = laporanData(); $('lLabel').textContent = d.m ? '— ' + BLN[+d.m.slice(5) - 1] + ' ' + d.m.slice(0, 4) : '— sejak tanggal saldo awal; pengambilan semua periode';
+  $('lBody').innerHTML = d.R.map(r => `<tr><td>${r[0]}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td class="n">${num(r[3])}</td><td class="n">${num(r[4])}</td><td class="n">${num(r[5])}</td><td class="n ${r[6] <= D.settings.STOK_MIN ? 'low' : ''}">${num(r[6])}</td><td class="n">${num(r[7])}</td></tr>`).join('');
+  $('lBody2').innerHTML = Object.keys(d.P).sort().map(k => { const o = d.P[k]; return `<tr><td>${esc(k)}</td><td class="n">${o.bon.size}</td><td class="n">${o.k.size}</td><td class="n">${num(o.q)}</td><td class="n">${num(o.v)}</td></tr>`; }).join('') || '<tr><td colspan="5" class="text-center text-secondary py-3">Belum ada pengambilan.</td></tr>';
+}
+function cetakRekap() {
+  const d = laporanData(), per = d.m ? BLN[+d.m.slice(5) - 1] + ' ' + d.m.slice(0, 4) : 'Semua periode';
+  const st = '<style>#pr table{width:100%;border-collapse:collapse;font-size:11px}#pr th,#pr td{border:1px solid #000;padding:3px 6px}#pr .n{text-align:right}</style>';
+  printHTML(`${st}<div><h3 style="text-align:center;margin:0">REKAP PERSEDIAAN &amp; PENGAMBILAN BARANG</h3><p style="text-align:center;margin:2px 0 12px">BPS Kabupaten Pesawaran — Periode: ${esc(per)}</p><table>${$('lTab1').innerHTML}</table><h4>Rekap per Seksi / Tim</h4><table>${$('lTab2').innerHTML}</table></div>`);
+}
+function exportLaporan() {
+  const d = laporanData(), r1 = [['No','Kode Barang','Nama Barang','Stok Awal','Masuk','Keluar','Stok Akhir','Nilai (Rp)']].concat(d.R), r2 = [['Seksi / Tim','Jumlah Bon','Jenis Barang','Total Unit','Nilai (Rp)']];
+  Object.keys(d.P).sort().forEach(k => { const o = d.P[k]; r2.push([k, o.bon.size, o.k.size, o.q, o.v]); });
+  const r3 = [['Tanggal','Seksi','Kode','Nama Barang','Jumlah','Harga Satuan','Nilai','Keperluan']];
+  D.keluar.filter(t => !d.m || t.tgl.slice(0, 7) === d.m).forEach(t => r3.push([t.tgl, t.seksi, t.kode, t.nama, t.jumlah, harga(t.kode), t.jumlah * harga(t.kode), t.keperluan]));
+  xl([{ name: 'Rekap Barang', rows: r1 }, { name: 'Rekap Seksi', rows: r2 }, { name: 'Detail Keluar', rows: r3 }], 'laporan-persediaan-' + (d.m || 'semua') + '.xlsx');
+}
+function xl(sheets, fn) {
+  if (!window.XLSX) return toast('Gagal', 'Pustaka Excel belum termuat. Periksa koneksi internet.', 'danger');
+  const wb = XLSX.utils.book_new();
+  sheets.forEach(s => { const ws = XLSX.utils.aoa_to_sheet(s.rows); ws['!cols'] = s.rows[0].map((_, i) => ({ wch: Math.min(45, Math.max(8, ...s.rows.map(r => String(r[i] == null ? '' : r[i]).length)) + 2) })); XLSX.utils.book_append_sheet(wb, ws, s.name); });
+  XLSX.writeFile(wb, fn);
+}
+
+/* ---- Pengaturan ---- */
+function renderSetting() {
+  const S = D.settings; $('sOp').value = S.OPERATOR_NAMA; $('sKs').value = S.KASUBAG_NAMA; $('sTgl').value = S.TGL_SALDO_AWAL; $('sMin').value = S.STOK_MIN;
+  $('sKetua').innerHTML = D.seksi.map((s, i) => `<div class="col-md-6"><label class="form-label">${esc(s)}</label><input class="form-control s-ketua" data-s="${esc(s)}" value="${esc(S.KETUA_TIM[s] || '')}"></div>`).join('');
+}
+async function saveSet() {
+  const K = {}; document.querySelectorAll('.s-ketua').forEach(i => K[i.dataset.s] = i.value);
+  const res = await adminApi('saveSettings', { OPERATOR_NAMA: $('sOp').value, KASUBAG_NAMA: $('sKs').value, KETUA_TIM: K, TGL_SALDO_AWAL: $('sTgl').value, STOK_MIN: $('sMin').value });
+  toast(res.success ? 'Berhasil' : 'Gagal', res.message, res.success ? 'success' : 'danger'); if (res.success) await reload(true);
+}
+async function gantiPw() {
+  const res = await adminApi('changePassword', { lama: $('pwLama').value, baru: $('pwBaru').value });
+  toast(res.success ? 'Berhasil' : 'Gagal', res.message, res.success ? 'success' : 'danger'); if (res.success) { $('pwLama').value = ''; $('pwBaru').value = ''; }
+}
+
+/* ============ START ============ */
+document.addEventListener('DOMContentLoaded', async () => {
+  let t = 'light'; try { t = localStorage.getItem('sigap-theme') || 'light'; } catch (e) {} applyTheme(t);
+  if (sessionStorage.getItem('sigap_token')) { $('pub').classList.add('hide'); await showAdmin(); if ($('adm').classList.contains('hide')) { $('pub').classList.remove('hide'); initPublic(); } }
+  else { $('pub').classList.remove('hide'); initPublic(); }
+});
+</script>
 </body>
 </html>
